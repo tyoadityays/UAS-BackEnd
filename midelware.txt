@@ -1,0 +1,22 @@
+midelware > auth.php
+return route('login92');
+
+web.php
+Route::get('/datapenduduk', [PendudukController::class, 'index'] )->middleware('auth');
+Route::get('/login92', [Login92Controller::class, 'login92'] )->name("login92");
+
+php artisan make:middleware CekRole
+
+$user = \App\Models\User::where('email', $request->email)->first();
+        if ($user->role == 'admin') {
+            return redirect('/datapenduduk');
+        } elseif ($user->role == 'user') {
+            return redirect('/datapenduduk');
+        }
+        return $next($request);
+
+kernelll
+        //middleware baru
+        'role' => \App\Http\Middleware\CekRole::class,
+
+Route::post('/proseslogin92', [Login92Controller::class, 'proseslogin92'] )->middleware('role');
